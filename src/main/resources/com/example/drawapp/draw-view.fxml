@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.drawapp.controllers.Controller"
+      spacing="100">
+
+    <!-- Shape Selection Panel -->
+    <VBox spacing="10">
+        <Button fx:id="rectShape" onAction="#selectRect" prefHeight="25.0" prefWidth="110.0" text="Square" />
+        <Button onAction="#selectTriangle" prefHeight="25.0" prefWidth="110.0" text="Triangle" />
+        <Button fx:id="circleShape" onAction="#selectCircle" prefHeight="25.0" prefWidth="110.0" text="Circle" />
+    </VBox>
+
+    <VBox>
+        <HBox>
+            <VBox spacing="10">
+                <HBox spacing="10">
+                    <Label text="Area : " />
+                    <Label fx:id="areaValue" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Perimeter : " />
+                    <Label fx:id="perimeterValue" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label prefHeight="17.0" prefWidth="19.0" text="x : " />
+                    <TextField prefHeight="25.0" prefWidth="54.0" fx:id="xValue" />
+
+                    <Label prefHeight="17.0" prefWidth="19.0" text="y : " />
+                    <TextField fx:id="yValue" prefHeight="25.0" prefWidth="54.0" />
+
+                </HBox>
+                <HBox spacing="10">
+                    <Label fx:id="widthOrRaduis" text="Width : " />
+                    <TextField fx:id="widthValue" prefHeight="25.0" prefWidth="83.0" />
+
+                    <Label fx:id="heightCaption" text="Height : " />
+                    <TextField fx:id="heightValue" prefHeight="25.0" prefWidth="83.0" />
+                </HBox>
+            </VBox>
+
+            <HBox spacing="10">
+                <Label text="Color :" />
+                <ColorPicker fx:id="colorPicker" onAction="#changeColor" />
+            </HBox>
+        </HBox>
+
+        <Canvas fx:id="canvas" height="800" width="800" />
+
+    </VBox>
+
+
+</HBox>
