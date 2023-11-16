@@ -30,12 +30,14 @@ public class Controller {
     @FXML
     public Label areaValue, perimeterValue, widthOrRaduis, heightCaption;
     public TextField xValue, yValue, widthValue, heightValue;
+    public Button rectShape, circleShape;
     private Color selectedColor;
     private GraphicsContext gc;
     private Shape selectedShape;
     private Rectangle rect;
     private Circle cir;
     private List<Shape> allShapes = new ArrayList<>();
+    double startX, startY, endX, endY;
 
     /**
      * initialise controlleurs, variables and set up event handlers
@@ -44,13 +46,13 @@ public class Controller {
     public void initialize() {
         initializeControls();
         setupEventHandlers();
-        setupShapes();
     }
 
     /**
      * initialization of controllers
      */
     private void initializeControls() {
+
         selectedColor = colorPicker.getValue();
         heightCaption = new Label();
         xValue.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -65,76 +67,39 @@ public class Controller {
     }
 
     /**
-     * creation of objects
-     */
-    private void setupShapes() {
-        rect = Rectangle.Square(50, 50, 200, selectedColor);
-        cir = new Circle(500, 50, 50, selectedColor);
-    }
-
-    /**
      * handles mouse events
      */
     private void setupEventHandlers() {
-        canvas.setOnMouseClicked(this::handleMouseClicked);
-        canvas.setOnMousePressed(this::handleMousePressed);
-        canvas.setOnMouseDragged(this::handleMouseDragged);
+        canvas.setOnMousePressed(e -> {
+            gc.beginPath();
+            startX = e.getX();
+            startY = e.getY();
+            gc.moveTo(startX, startY);
+        });
+        canvas.setOnMouseDragged(e -> {
+            endX = e.getX();
+            endY = e.getY();
+            // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            // gc.rect(startX, startY, endX - startX, endY - startY);
+            // gc.stroke();
+        });
+        canvas.setOnMouseReleased(e -> {
+            endX = e.getX();
+            endY = e.getY();
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            gc.rect(startX, startY, endX - startX, endY - startY);
+            // gc.setFill(Color.GREEN);
+            //gc.fill();
+            gc.stroke();
+            //whichButtonIsPressed();
+        });
+
     }
-
-    /**
-     * Handles the mouse click event
-     *
-     * @param mouseEvent mouse click event
-     */
-    private void handleMouseClicked(MouseEvent mouseEvent) {
-        double mouseX = mouseEvent.getX();
-        double mouseY = mouseEvent.getY();
-        boolean shapeClicked = false;
-
-        for (Shape shape : allShapes) {
-            if (shape.contains(mouseX, mouseY)) {
-                shapeClicked = true;
-                selectedShape = shape;
-                break;
-            }
-        }
-
-        if(shapeClicked){
-            drawShapeBorder();
-        } else{
-            clearShapeBorder();
-        }
-    }
-
-    /**
-     * draw the border of the shape
-     */
-    public void drawShapeBorder(){
-        try {
-            gc.setStroke(Color.GRAY);
-            gc.setLineWidth(2.0);
-            selectedShape.drawBorder(gc);
-            drawShapes();
-        } catch (NullPointerException e) {
-            System.out.println("the selected Shape is NULL");
-        }
-    }
-
-    /**
-     * clear the border of the shape
-     */
-    public void clearShapeBorder() {
-        try {
-            if (selectedShape instanceof Rectangle){
-                gc.clearRect(selectedShape.getX() - BORDER_OFFSET, selectedShape.getY() - BORDER_OFFSET,
-                        rect.getWidth() + 2 * BORDER_OFFSET, rect.getHeight() + 2 * BORDER_OFFSET);
-            } else if (selectedShape instanceof Circle){
-                gc.clearRect(selectedShape.getX() - BORDER_OFFSET, selectedShape.getY() - BORDER_OFFSET,
-                        cir.getRadius() + 2 * BORDER_OFFSET, cir.getRadius() + 2 * BORDER_OFFSET);
-            }
-            drawShapes();
-        } catch (NullPointerException e) {
-            System.out.println("the selected Shape is NULL");
+    public void whichButtonIsPressed(){
+        if (rectShape.isPressed()){
+            selectRect();
+        } else if (circleShape.isPressed()){
+            selectCircle();
         }
     }
 
@@ -143,16 +108,6 @@ public class Controller {
      *
      * @param mouseEvent mouse drag event
      */
-    void handleMouseDragged(MouseEvent mouseEvent) {
-    }
-
-    /**
-     * Handles the mouse press event
-     *
-     * @param mouseEvent mouse press event
-     */
-    private void handleMousePressed(MouseEvent mouseEvent) {
-    }
 
     /**
      * draw a shape
@@ -210,15 +165,13 @@ public class Controller {
     /**
      * handles the selection of a rectangle on the screen
      *
-     * @param actionEvent event on the button
      */
-    public void selectRect(ActionEvent actionEvent) {
+    public void selectRect() {
+        rect = new Rectangle(startX, startY, endX - startX, endY - startY, selectedColor);
+        allShapes.add(rect);
         selectedShape = rect;
-        allShapes.add(selectedShape);
 
-        if (selectedShape != null) {
-            drawShapes();
-        }
+        drawShapes();
     }
 
     /**
@@ -231,10 +184,9 @@ public class Controller {
 
     /**
      * handles the selection of a circle on the screen
-     *
-     * @param actionEvent
      */
-    public void selectCircle(ActionEvent actionEvent) {
+    public void selectCircle() {
+        cir = new Circle(startX, startY, (endX - startX) / 2, selectedColor);
         allShapes.add(cir);
         selectedShape = cir;
 
