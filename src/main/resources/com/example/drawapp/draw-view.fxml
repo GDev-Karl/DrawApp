@@ -7,13 +7,13 @@
 <HBox xmlns="http://javafx.com/javafx/16"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.drawapp.controllers.Controller"
-      spacing="100">
+      spacing="50">
 
     <!-- Shape Selection Panel -->
     <VBox spacing="10">
-        <Button fx:id="rectShape" onAction="#selectRect" prefHeight="25.0" prefWidth="110.0" text="Square" />
-        <Button onAction="#selectTriangle" prefHeight="25.0" prefWidth="110.0" text="Triangle" />
-        <Button fx:id="circleShape" onAction="#selectCircle" prefHeight="25.0" prefWidth="110.0" text="Circle" />
+        <Button text="Square" fx:id="rectShape" onAction="#selectRect" prefHeight="25.0" prefWidth="110.0" />
+        <Button text="Triangle" onAction="#selectTriangle" prefHeight="25.0" prefWidth="110.0"  />
+        <Button text="Circle" fx:id="circleShape" onAction="#selectCircle" prefHeight="25.0" prefWidth="110.0"  />
     </VBox>
 
     <VBox>
@@ -52,7 +52,7 @@
             </HBox>
         </HBox>
 
-        <Canvas fx:id="canvas" height="800" width="800" />
+        <Canvas fx:id="canvas" height="1000" width="1000" />
 
     </VBox>
 
