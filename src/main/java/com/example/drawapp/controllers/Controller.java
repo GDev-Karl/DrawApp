@@ -15,7 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
 
@@ -28,14 +29,14 @@ public class Controller {
     @FXML
     public TextField xValue, yValue, widthValue, heightValue;
     @FXML
-    public Button rectShape, circleShape;
+    public Button squareShape, rectShape, circleShape, ellipseShape;
     private Color selectedColor;
     private GraphicsContext gc;
     private Shape selectedShape;
     private Rectangle rect, square;
     // private Circle cir;
     private Ellipse cir, ellipse;
-    private Set<Shape> allShapes = new HashSet<>();
+    private List<Shape> allShapes = new ArrayList<>();
     double startX, startY, endX, endY;
 
     /**
@@ -104,8 +105,9 @@ public class Controller {
                 endY = e.getY();
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 gc.rect(startX, startY, endX - startX, endY - startY);
+                drawShapes();
                 gc.stroke();
-            }else{
+            } else{
                 handleRightMouseReleased(e);
             }
         });
@@ -158,7 +160,7 @@ public class Controller {
 
         // Check if the mouse is inside any shape
         for (Shape shape : allShapes) {
-            if (shape.isSelected()){
+            if (shape.isSelected() && (shape instanceof Rectangle || shape instanceof Ellipse)){
                 return shape;
             }
         }
@@ -170,17 +172,22 @@ public class Controller {
      * draw a shape
      */
     public void drawShapes() {
-        //gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (Shape shape : allShapes) {
-            if (shape.isSelected()) {
-                if (shape instanceof Rectangle) {
-                    drawRectangle((Rectangle) shape);
-                } else if (shape instanceof Ellipse) {
-                    drawEllipse((Ellipse) shape);
-                }
+            shape.draw(gc);
+
+            if (shape instanceof Rectangle) {
+                setRectProperties((Rectangle) shape);
+            } else if (shape instanceof Ellipse) {
+                setCircleProperties((Ellipse) shape);
             }
         }
+    }
+
+    public void drawEdiShape(Shape shape){
+        shape.setX(startX);
+        shape.setY(startY);
+        shape.draw(gc);
     }
 
     /**
@@ -230,7 +237,8 @@ public class Controller {
         allShapes.add(rect);
         selectedShape = rect;
         rect.setSelected(true);
-        drawShapes();
+
+        drawEdiShape(selectedShape);
     }
 
     /**
@@ -251,7 +259,7 @@ public class Controller {
         selectedShape = cir;
         cir.setSelected(true);
 
-        drawShapes();
+        drawEdiShape(selectedShape);
     }
 
     /**
@@ -264,37 +272,15 @@ public class Controller {
 
         if (selectedShape != null) {
             selectedShape.setColor(selectedColor);
-            drawSelectedShape(); // Redraw only the selected shape
+            drawEdiShape(selectedShape); // Redraw to reflect the color change
         }
-    }
-
-    private void drawSelectedShape() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        if (selectedShape != null) {
-            if (selectedShape instanceof Rectangle) {
-                drawRectangle((Rectangle) selectedShape);
-            } else if (selectedShape instanceof Ellipse) {
-                drawEllipse((Ellipse) selectedShape);
-            }
-        }
-    }
-
-    private void drawEllipse(Ellipse shape) {
-        shape.draw(gc);
-        setCircleProperties(shape);
-    }
-
-    private void drawRectangle(Rectangle shape) {
-        shape.draw(gc);
-        setRectProperties(shape);
     }
 
     /**
      * selection of a square(rectangle with width = height)
      * @param actionEvent
      */
-    public void selectSquare(ActionEvent actionEvent) {
+    public void selectSquare(MouseEvent actionEvent) {
         double width = endX - startX;
         double height = endY - startY;
 
@@ -303,7 +289,7 @@ public class Controller {
         selectedShape = square;
         square.setSelected(true);
 
-        drawShapes();
+        drawEdiShape(selectedShape);
     }
 
     /**
@@ -317,8 +303,8 @@ public class Controller {
         ellipse = new Ellipse(startX, startY, width / 2, height / 2, selectedColor);
         allShapes.add(ellipse);
         selectedShape = ellipse;
-        ellipse.setSelected(true);
+        //ellipse.setSelected(true);
 
-        drawShapes();
+        drawEdiShape(selectedShape);
     }
 }
