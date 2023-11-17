@@ -34,7 +34,6 @@ public class Controller {
     private GraphicsContext gc;
     private Shape selectedShape;
     private Rectangle rect, square;
-    // private Circle cir;
     private Ellipse cir, ellipse;
     private List<Shape> allShapes = new ArrayList<>();
     double startX, startY, endX, endY;
@@ -72,8 +71,6 @@ public class Controller {
                 }
             }
         });
-
-        // drawShapes();
 
     }
 
@@ -184,6 +181,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Draw only on shape
+     * @param shape
+     */
     public void drawEdiShape(Shape shape){
         shape.setX(startX);
         shape.setY(startY);
@@ -205,7 +206,6 @@ public class Controller {
         widthValue.setText(String.valueOf(shape.getWidth()));
         heightValue.setText(String.valueOf(shape.getHeight()));
 
-        //if (shape.isSelected())
     }
 
     /**
@@ -246,8 +246,6 @@ public class Controller {
      *
      * @param actionEvent event on the button
      */
-    public void selectTriangle(ActionEvent actionEvent) {
-    }
 
     /**
      * handles the selection of a circle on the screen
@@ -303,7 +301,7 @@ public class Controller {
         ellipse = new Ellipse(startX, startY, width / 2, height / 2, selectedColor);
         allShapes.add(ellipse);
         selectedShape = ellipse;
-        //ellipse.setSelected(true);
+        ellipse.setSelected(true);
 
         drawEdiShape(selectedShape);
     }
