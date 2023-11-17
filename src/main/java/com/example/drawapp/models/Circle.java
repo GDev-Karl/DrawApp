@@ -9,6 +9,10 @@ public class Circle extends Shape {
 
     private double radius;
 
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
     /**
      *
      * @param x  x-coordonate
@@ -50,7 +54,7 @@ public class Circle extends Shape {
 
     @Override
     public boolean contains(double mouseX, double mouseY) {
-        if (mouseX < this.radius + this.x || mouseY < this.radius + this.y){
+        if (mouseX <= this.x || mouseY <= this.y){
             return true;
         }
         return false;

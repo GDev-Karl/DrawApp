@@ -11,9 +11,11 @@
 
     <!-- Shape Selection Panel -->
     <VBox spacing="10">
-        <Button text="Square" fx:id="rectShape" onAction="#selectRect" prefHeight="25.0" prefWidth="110.0" />
+        <Button text="Rectangle" fx:id="rectShape" onAction="#selectRect" prefHeight="25.0" prefWidth="110.0" />
+        <Button text="Square" fx:id="squareShape" onAction="#selectSquare" prefHeight="25.0" prefWidth="110.0" />
         <Button text="Triangle" onAction="#selectTriangle" prefHeight="25.0" prefWidth="110.0"  />
         <Button text="Circle" fx:id="circleShape" onAction="#selectCircle" prefHeight="25.0" prefWidth="110.0"  />
+        <Button text="Ellipse" fx:id="ellipseShape" onAction="#selectEllipse" prefHeight="25.0" prefWidth="110.0"  />
     </VBox>
 
     <VBox>
@@ -52,7 +54,7 @@
             </HBox>
         </HBox>
 
-        <Canvas fx:id="canvas" height="1000" width="1000" />
+        <Canvas fx:id="canvas" height="600" width="800" />
 
     </VBox>
 

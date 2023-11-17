@@ -1,6 +1,7 @@
 module com.example.drawapp {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens com.example.drawapp to javafx.fxml;

@@ -11,11 +11,12 @@ public class Rectangle extends Shape {
     private double height;
 
     /**
-     * Constructor
-     * @param x  x-coordonate
-     * @param y  y-coordonate
+     * Constructor of the shape rectangle
+     *
+     * @param x      x-coordonate
+     * @param y      y-coordonate
      * @param width  width of the shape
-     * @param height  height of the shape
+     * @param height height of the shape
      * @param color  color of the shape
      */
     public Rectangle(double x, double y, double width, double height, Color color) {
@@ -53,23 +54,21 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean contains(double mouseX, double mouseY) {
-        if (mouseX < this.width + this.x || mouseY < this.height + this.y){
+        if (mouseX <= this.x || mouseY <= this.y) {
             return true;
         }
         return false;
     }
 
     /**
-     *
-     * @return  get the width of the rectangle
+     * @return get the width of the rectangle
      */
     public double getWidth() {
         return this.width;
     }
 
     /**
-     *
-     * @return  get the height of the shape
+     * @return get the height of the shape
      */
     public double getHeight() {
         return this.height;
@@ -77,13 +76,14 @@ public class Rectangle extends Shape {
 
     /**
      * Create a Square Object from Rectangle
-     * @param x  x-coordonate
-     * @param y  y-coordonate
+     *
+     * @param x     x-coordonate
+     * @param y     y-coordonate
      * @param size  size of the Square
      * @param color color of the square
-     * @return  a new Rectangle with width = height = size
+     * @return a new Rectangle with width = height = size
      */
-    public static Rectangle Square(double x, double y, double size, Color color){
+    public static Rectangle Square(double x, double y, double size, Color color) {
         return new Rectangle(x, y, size, size, color);
     }
 }
