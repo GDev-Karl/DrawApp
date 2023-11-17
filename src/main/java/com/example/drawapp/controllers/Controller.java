@@ -15,11 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.example.drawapp.models.Shape.BORDER_OFFSET;
 
 public class Controller {
 
@@ -71,37 +67,79 @@ public class Controller {
      */
     private void setupEventHandlers() {
         canvas.setOnMousePressed(e -> {
-            gc.beginPath();
-            startX = e.getX();
-            startY = e.getY();
-            gc.moveTo(startX, startY);
+            if (e.isShiftDown()){
+                gc.beginPath();
+                startX = e.getX();
+                startY = e.getY();
+                gc.moveTo(startX, startY);
+            } else {
+                handleRightMousePressed(e);
+            }
         });
         canvas.setOnMouseDragged(e -> {
-            endX = e.getX();
-            endY = e.getY();
-            // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            // gc.rect(startX, startY, endX - startX, endY - startY);
-            // gc.stroke();
+            if (e.isShiftDown()){
+                endX = e.getX();
+                endY = e.getY();
+            } else {
+                handleRightMouseDragged(e);
+            }
         });
         canvas.setOnMouseReleased(e -> {
-            endX = e.getX();
-            endY = e.getY();
-            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            gc.rect(startX, startY, endX - startX, endY - startY);
-            // gc.setFill(Color.GREEN);
-            //gc.fill();
-            gc.stroke();
-            //whichButtonIsPressed();
+            if(e.isShiftDown()){
+                endX = e.getX();
+                endY = e.getY();
+                gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                gc.rect(startX, startY, endX - startX, endY - startY);
+                gc.stroke();
+                //selectAllBttons();
+            }
         });
 
     }
-    public void whichButtonIsPressed(){
-        if (rectShape.isPressed()){
-            selectRect();
-        } else if (circleShape.isPressed()){
-            selectCircle();
+
+    public void handleRightMouseDragged(MouseEvent e) {
+        if (handleRightMousePressed(e)){
+            endX = e.getX();
+            endY = e.getY();
+
+            // Calculate the translation values
+            double deltaX = endX - startX;
+            double deltaY = endY - startY;
+
+            // Move the selected shape
+            if (selectedShape != null) {
+                selectedShape.move(deltaX, deltaY);
+                drawShapes();
+            }
+
+            // Update start coordinates for the next drag event
+            startX = endX;
+            startY = endY;
         }
     }
+
+    public void selectAllBttons(){
+        selectRect();
+        selectCircle();
+    }
+
+    public boolean handleRightMousePressed(MouseEvent mouseEvent) {
+        startX = mouseEvent.getX();
+        startY = mouseEvent.getY();
+
+        // Check if the mouse is inside any shape
+        for (Shape shape : allShapes) {
+            if (shape.contains(startX, startY)) {
+                selectedShape = shape;
+                return true;
+            }
+        }
+
+        // If no shape is selected, set selectedShape to null
+        selectedShape = null;
+        return false;
+    }
+
 
     /**
      * Handles the mouse drag event
@@ -167,7 +205,10 @@ public class Controller {
      *
      */
     public void selectRect() {
-        rect = new Rectangle(startX, startY, endX - startX, endY - startY, selectedColor);
+        double width = endX - startX;
+        double height = endY - startY;
+
+        rect = new Rectangle(startX, startY, width, height, selectedColor);
         allShapes.add(rect);
         selectedShape = rect;
 
@@ -186,7 +227,8 @@ public class Controller {
      * handles the selection of a circle on the screen
      */
     public void selectCircle() {
-        cir = new Circle(startX, startY, (endX - startX) / 2, selectedColor);
+        double diameter = Math.min(endX - startX, endY - startY);
+        cir = new Circle(startX, startY, diameter / 2, selectedColor);
         allShapes.add(cir);
         selectedShape = cir;
 
