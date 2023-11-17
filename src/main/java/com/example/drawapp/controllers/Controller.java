@@ -280,7 +280,7 @@ public class Controller {
      * selection of a square(rectangle with width = height)
      * @param actionEvent
      */
-    public void selectSquare(MouseEvent actionEvent) {
+    public void selectSquare(ActionEvent actionEvent) {
         double width = endX - startX;
         double height = endY - startY;
 
